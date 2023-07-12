@@ -13,7 +13,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1682713003"
+LABEL build_id="1689202388"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -38,7 +38,7 @@ RUN chmod +x /tini \
 ENV LANG=en_EN.UTF-8
 
 
-RUN apt-get update \
+RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
         ca-certificates \

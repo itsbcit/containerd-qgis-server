@@ -22,7 +22,7 @@ FROM debian:bullseye-slim
 ENV LANG=en_EN.UTF-8
 
 
-RUN apt-get update \
+RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
         ca-certificates \
