@@ -4,11 +4,13 @@ WORKDIR /src
 
 COPY <%= image.vars['dataplotly_filename'] %> .
 COPY <%= image.vars['lizmap_filename'] %> .
+COPY <%= image.vars['geojson_filename'] %> .
 
 RUN ls -alh
 
 RUN unzip <%= image.vars['dataplotly_filename'] %> \
   && unzip <%= image.vars['lizmap_filename'] %> \
+  && unzip <%= image.vars['geojson_filename'] %> \
   && ls -alh
 
 FROM debian:bullseye-slim
@@ -58,6 +60,7 @@ COPY --chown=qgis:qgis cmd.sh /home/qgis/cmd.sh
 RUN chmod -R 777 /home/qgis/cmd.sh /usr/lib/qgis/plugins
 COPY --from=build --chown=qgis:qgis /src/DataPlotly/ /usr/lib/qgis/plugins/DataPlotly
 COPY --from=build --chown=qgis:qgis /src/lizmap_server/ /usr/lib/qgis/plugins/lizmap_server
+COPY --from=build --chown=qgis:qgis /src/qgis_server_render_geojson/ /usr/lib/qgis/plugins/qgis_server_render_geojson
 RUN ls -alh /usr/lib/qgis/plugins/
 
 # setup qgis-plugin-manager

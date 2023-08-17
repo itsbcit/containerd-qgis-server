@@ -4,16 +4,18 @@ WORKDIR /src
 
 COPY DataPlotly-4.0.0.zip .
 COPY lizmap_server-2.7.1.zip .
+COPY qgis_server_render_geojson-v0.4.zip .
 
 RUN ls -alh
 
 RUN unzip DataPlotly-4.0.0.zip \
   && unzip lizmap_server-2.7.1.zip \
+  && unzip qgis_server_render_geojson-v0.4.zip \
   && ls -alh
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1692312832"
+LABEL build_id="1692313652"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -69,15 +71,16 @@ RUN useradd -m qgis
 ENV QGIS_PREFIX_PATH /usr
 ENV QGIS_SERVER_LOG_STDERR 1
 ENV QGIS_SERVER_LOG_LEVEL 2
-ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins
 
 COPY --chown=qgis:qgis cmd.sh /home/qgis/cmd.sh
 RUN chmod -R 777 /home/qgis/cmd.sh /usr/lib/qgis/plugins
 COPY --from=build --chown=qgis:qgis /src/DataPlotly/ /usr/lib/qgis/plugins/DataPlotly
 COPY --from=build --chown=qgis:qgis /src/lizmap_server/ /usr/lib/qgis/plugins/lizmap_server
+COPY --from=build --chown=qgis:qgis /src/qgis_server_render_geojson/ /usr/lib/qgis/plugins/qgis_server_render_geojson
 RUN ls -alh /usr/lib/qgis/plugins/
 
 # setup qgis-plugin-manager
+ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins
 RUN pip3 install qgis-plugin-manager
 RUN cd /usr/lib/qgis/plugins
 RUN qgis-plugin-manager init

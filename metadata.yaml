@@ -10,3 +10,4 @@ vars:
   dockerize_version: '0.6.1'
   dataplotly_filename: 'DataPlotly-4.0.0.zip'
   lizmap_filename: 'lizmap_server-2.7.1.zip'
+  geojson_filename: 'qgis_server_render_geojson-v0.4.zip'
