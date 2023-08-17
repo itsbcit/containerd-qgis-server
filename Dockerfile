@@ -13,7 +13,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1689202388"
+LABEL build_id="1692312832"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -44,6 +44,7 @@ RUN apt-get --assume-yes update \
         ca-certificates \
         wget \
         locales \
+        python3-pip \
     && localedef -i en_US -f UTF-8 en_US.UTF-8 \
     # Add the current key for package downloading
     # Please refer to QGIS install documentation (https://www.qgis.org/fr/site/forusers/alldownloads.html#debian-ubuntu)
@@ -68,12 +69,20 @@ RUN useradd -m qgis
 ENV QGIS_PREFIX_PATH /usr
 ENV QGIS_SERVER_LOG_STDERR 1
 ENV QGIS_SERVER_LOG_LEVEL 2
+ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins
 
 COPY --chown=qgis:qgis cmd.sh /home/qgis/cmd.sh
-RUN chmod -R 777 /home/qgis/cmd.sh
+RUN chmod -R 777 /home/qgis/cmd.sh /usr/lib/qgis/plugins
 COPY --from=build --chown=qgis:qgis /src/DataPlotly/ /usr/lib/qgis/plugins/DataPlotly
 COPY --from=build --chown=qgis:qgis /src/lizmap_server/ /usr/lib/qgis/plugins/lizmap_server
 RUN ls -alh /usr/lib/qgis/plugins/
+
+# setup qgis-plugin-manager
+RUN pip3 install qgis-plugin-manager
+RUN cd /usr/lib/qgis/plugins
+RUN qgis-plugin-manager init
+RUN qgis-plugin-manager update
+RUN qgis-plugin-manager upgrade
 
 USER qgis
 WORKDIR /home/qgis
