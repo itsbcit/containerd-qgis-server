@@ -76,9 +76,17 @@ RUN qgis-plugin-manager update
 RUN qgis-plugin-manager upgrade
 
 ####
+# DataPlotly
+
+
+####
 # GEOJSON
 # Location where geojson style and geojson files are stored
-ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson
+ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson/data
+
+
+####
+# LizMap
 
 
 

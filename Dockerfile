@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1692740113"
+LABEL build_id="1692741184"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -39,7 +39,8 @@ RUN chmod +x /tini \
 
 ENV LANG=en_EN.UTF-8
 
-
+####
+# QGIS Setup
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
@@ -71,7 +72,6 @@ RUN useradd -m qgis
 ENV QGIS_PREFIX_PATH /usr
 ENV QGIS_SERVER_LOG_STDERR 1
 ENV QGIS_SERVER_LOG_LEVEL 2
-ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson
 
 COPY --chown=qgis:qgis cmd.sh /home/qgis/cmd.sh
 RUN chmod -R 777 /home/qgis/cmd.sh /usr/lib/qgis/plugins
@@ -80,6 +80,9 @@ COPY --from=build --chown=qgis:qgis /src/lizmap_server/ /usr/lib/qgis/plugins/li
 COPY --from=build --chown=qgis:qgis /src/qgis_server_render_geojson/ /usr/lib/qgis/plugins/qgis_server_render_geojson
 RUN ls -alh /usr/lib/qgis/plugins/
 
+
+####
+# QGIS Plugin
 # setup qgis-plugin-manager and upgrade qgis plugins
 ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins/
 RUN pip3 install qgis-plugin-manager
@@ -87,6 +90,21 @@ RUN cd /usr/lib/qgis/plugins
 RUN qgis-plugin-manager init
 RUN qgis-plugin-manager update
 RUN qgis-plugin-manager upgrade
+
+####
+# DataPlotly
+
+
+####
+# GEOJSON
+# Location where geojson style and geojson files are stored
+ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson/data
+
+
+####
+# LizMap
+
+
 
 USER qgis
 WORKDIR /home/qgis
