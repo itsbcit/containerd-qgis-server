@@ -23,7 +23,8 @@ FROM debian:bullseye-slim
 
 ENV LANG=en_EN.UTF-8
 
-
+####
+# QGIS Setup
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
@@ -63,13 +64,23 @@ COPY --from=build --chown=qgis:qgis /src/lizmap_server/ /usr/lib/qgis/plugins/li
 COPY --from=build --chown=qgis:qgis /src/qgis_server_render_geojson/ /usr/lib/qgis/plugins/qgis_server_render_geojson
 RUN ls -alh /usr/lib/qgis/plugins/
 
-# setup qgis-plugin-manager
-ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins
+
+####
+# QGIS Plugin
+# setup qgis-plugin-manager and upgrade qgis plugins
+ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins/
 RUN pip3 install qgis-plugin-manager
 RUN cd /usr/lib/qgis/plugins
 RUN qgis-plugin-manager init
 RUN qgis-plugin-manager update
 RUN qgis-plugin-manager upgrade
+
+####
+# GEOJSON
+# Location where geojson style and geojson files are stored
+ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson
+
+
 
 USER qgis
 WORKDIR /home/qgis
