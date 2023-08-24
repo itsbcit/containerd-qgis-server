@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1692741184"
+LABEL build_id="1692894110"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -71,7 +71,7 @@ RUN useradd -m qgis
 
 ENV QGIS_PREFIX_PATH /usr
 ENV QGIS_SERVER_LOG_STDERR 1
-ENV QGIS_SERVER_LOG_LEVEL 2
+ENV QGIS_SERVER_LOG_LEVEL 0
 
 COPY --chown=qgis:qgis cmd.sh /home/qgis/cmd.sh
 RUN chmod -R 777 /home/qgis/cmd.sh /usr/lib/qgis/plugins
@@ -93,7 +93,9 @@ RUN qgis-plugin-manager upgrade
 
 ####
 # DataPlotly
-
+RUN apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
+        python3-plotly \
+        python3-pyqt5.qtwebkit
 
 ####
 # GEOJSON
@@ -102,9 +104,10 @@ ENV QGIS_RENDERGEOJSON_PREFIX /usr/lib/qgis/plugins/qgis_server_render_geojson/d
 
 
 ####
-# LizMap
-
-
+# # LizMap
+# ENV rootRepositories 
+# ENV QGIS_OPTIONS_PATH
+ENV QGIS_SERVER_LIZMAP_REVEAL_SETTINGS TRUE
 
 USER qgis
 WORKDIR /home/qgis
