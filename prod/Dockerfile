@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1724359126"
+LABEL build_id="1724360778"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz

@@ -10,8 +10,8 @@ versions:
       tini_version: '0.19.0'
       de_version: '1.5'
       dockerize_version: '0.6.1'
-      dataplotly_filename: 'DataPlotly-4.0.0.zip'
-      lizmap_filename: 'lizmap_server-2.7.1.zip'
+      dataplotly_filename: 'DataPlotly-4.1.0.zip'
+      lizmap_filename: 'lizmap_server-2.9.4.zip'
       geojson_filename: 'qgis_server_render_geojson-v0.4.zip'
       qgis_server_version: '3.34.10'
     tags: 
