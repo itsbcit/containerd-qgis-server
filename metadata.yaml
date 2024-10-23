@@ -11,9 +11,9 @@ versions:
       de_version: '1.5'
       dockerize_version: '0.6.1'
       dataplotly_filename: 'DataPlotly-4.1.0.zip'
-      lizmap_filename: 'lizmap_server-2.9.4.zip'
+      lizmap_filename: 'lizmap_server-2.11.2.zip'
       geojson_filename: 'qgis_server_render_geojson-v0.4.zip'
-      qgis_server_version: '3.34.10'
+      qgis_server_version: '3.34.11'
     tags: 
       - test-<%= vars['qgis_server_version'] %>
   'prod':

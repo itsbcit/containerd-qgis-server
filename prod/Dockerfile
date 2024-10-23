@@ -2,9 +2,9 @@ FROM bcit.io/alpine:latest as build
 
 WORKDIR /src
 
-COPY DataPlotly-4.0.0.zip .
-COPY lizmap_server-2.7.1.zip .
-COPY qgis_server_render_geojson-v0.4.zip .
+COPY qgis-plugins/DataPlotly-4.0.0.zip .
+COPY qgis-plugins/lizmap_server-2.7.1.zip .
+COPY qgis-plugins/qgis_server_render_geojson-v0.4.zip .
 
 RUN ls -alh
 
@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.0.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1724360778"
+LABEL build_id="1729716592"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz

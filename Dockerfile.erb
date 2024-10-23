@@ -2,9 +2,9 @@ FROM bcit.io/alpine:latest as build
 
 WORKDIR /src
 
-COPY <%= image.vars['dataplotly_filename'] %> .
-COPY <%= image.vars['lizmap_filename'] %> .
-COPY <%= image.vars['geojson_filename'] %> .
+COPY qgis-plugins/<%= image.vars['dataplotly_filename'] %> .
+COPY qgis-plugins/<%= image.vars['lizmap_filename'] %> .
+COPY qgis-plugins/<%= image.vars['geojson_filename'] %> .
 
 RUN ls -alh
 

@@ -2,20 +2,20 @@ FROM bcit.io/alpine:latest as build
 
 WORKDIR /src
 
-COPY DataPlotly-4.1.0.zip .
-COPY lizmap_server-2.9.4.zip .
-COPY qgis_server_render_geojson-v0.4.zip .
+COPY qgis-plugins/DataPlotly-4.1.0.zip .
+COPY qgis-plugins/lizmap_server-2.11.2.zip .
+COPY qgis-plugins/qgis_server_render_geojson-v0.4.zip .
 
 RUN ls -alh
 
 RUN unzip DataPlotly-4.1.0.zip \
-  && unzip lizmap_server-2.9.4.zip \
+  && unzip lizmap_server-2.11.2.zip \
   && unzip qgis_server_render_geojson-v0.4.zip \
   && ls -alh
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1724360778"
+LABEL build_id="1729719212"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -58,7 +58,7 @@ RUN apt-get --assume-yes update \
     && echo "deb [signed-by=/etc/apt/keyrings/qgis-archive-keyring.gpg] https://qgis.org/debian-ltr bullseye main" | tee /etc/apt/sources.list.d/qgis.list \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
-    qgis-server=1:3.34.10+16bullseye  \
+    qgis-server=1:3.34.11+16bullseye  \
         python3-qgis \
         spawn-fcgi \
         xauth \
