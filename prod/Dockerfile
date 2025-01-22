@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.1.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1730319247"
+LABEL build_id="1737582088"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -44,6 +44,7 @@ ENV LANG=en_EN.UTF-8
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
+        software-properties-common \
         ca-certificates \
         wget \
         locales \
@@ -58,7 +59,9 @@ RUN apt-get --assume-yes update \
     && echo "deb [signed-by=/etc/apt/keyrings/qgis-archive-keyring.gpg] https://qgis.org/debian-ltr bullseye main" | tee /etc/apt/sources.list.d/qgis.list \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
-    qgis-server=1:3.34.11+16bullseye  \
+    qgis-providers-common=1:3.34.14+16bullseye \
+    python3-qgis-common=1:3.34.14+16bullseye \
+    qgis-server=1:3.34.14+16bullseye  \
         python3-qgis \
         spawn-fcgi \
         xauth \

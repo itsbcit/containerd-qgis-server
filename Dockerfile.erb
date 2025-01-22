@@ -28,6 +28,7 @@ ENV LANG=en_EN.UTF-8
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
+        software-properties-common \
         ca-certificates \
         wget \
         locales \
@@ -42,6 +43,8 @@ RUN apt-get --assume-yes update \
     && echo "deb [signed-by=/etc/apt/keyrings/qgis-archive-keyring.gpg] https://qgis.org/debian-ltr bullseye main" | tee /etc/apt/sources.list.d/qgis.list \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
+    qgis-providers-common=1:<%= image.vars['qgis_server_version'] %>+16bullseye \
+    python3-qgis-common=1:<%= image.vars['qgis_server_version'] %>+16bullseye \
     qgis-server=1:<%= image.vars['qgis_server_version'] %>+16bullseye  \
         python3-qgis \
         spawn-fcgi \
