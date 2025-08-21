@@ -13,7 +13,7 @@ RUN unzip <%= image.vars['dataplotly_filename'] %> \
   && unzip <%= image.vars['geojson_filename'] %> \
   && ls -alh
 
-FROM debian:bullseye-slim
+FROM debian:<%= image.vars['debian_codename'] %>-slim
 <%= snippet('labels', binding) -%>
 
 <%= snippet('docker-entrypoint', binding) -%>
@@ -25,6 +25,7 @@ ENV LANG=en_EN.UTF-8
 
 ####
 # QGIS Setup
+COPY data/qgis.sources /etc/apt/sources.list.d/qgis.sources
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
@@ -43,9 +44,9 @@ RUN apt-get --assume-yes update \
     && echo "deb [signed-by=/etc/apt/keyrings/qgis-archive-keyring.gpg] https://qgis.org/debian-ltr bullseye main" | tee /etc/apt/sources.list.d/qgis.list \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
-    qgis-providers-common=1:<%= image.vars['qgis_server_version'] %>+16bullseye \
-    python3-qgis-common=1:<%= image.vars['qgis_server_version'] %>+16bullseye \
-    qgis-server=1:<%= image.vars['qgis_server_version'] %>+16bullseye  \
+        qgis-providers-common \
+        python3-qgis-common \
+        qgis-server \
         python3-qgis \
         spawn-fcgi \
         xauth \
@@ -73,7 +74,7 @@ RUN ls -alh /usr/lib/qgis/plugins/
 # QGIS Plugin
 # setup qgis-plugin-manager and upgrade qgis plugins
 ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins/
-RUN pip3 install qgis-plugin-manager
+RUN pip3 install qgis-plugin-manager --break-system-packages
 RUN cd /usr/lib/qgis/plugins
 RUN qgis-plugin-manager init
 RUN qgis-plugin-manager update

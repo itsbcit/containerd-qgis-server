@@ -15,7 +15,7 @@ RUN unzip DataPlotly-4.1.0.zip \
 
 FROM debian:bullseye-slim
 LABEL maintainer="jesse@weisner.ca, chriswood.ca@gmail.com"
-LABEL build_id="1737582088"
+LABEL build_id="1755798032"
 
 # Add docker-entrypoint script base
 ADD https://github.com/itsbcit/docker-entrypoint/releases/download/v1.5/docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
@@ -41,6 +41,7 @@ ENV LANG=en_EN.UTF-8
 
 ####
 # QGIS Setup
+COPY data/qgis.sources /etc/apt/sources.list.d/qgis.sources
 RUN apt-get --assume-yes update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
         gnupg \
@@ -56,12 +57,11 @@ RUN apt-get --assume-yes update \
     && wget -O /etc/apt/keyrings/qgis-archive-keyring.gpg https://download.qgis.org/downloads/qgis-archive-keyring.gpg \
     # Add repository for latest version of qgis-server
     # Please refer to QGIS repositories documentation if you want other version (https://qgis.org/en/site/forusers/alldownloads.html#repositories)
-    && echo "deb [signed-by=/etc/apt/keyrings/qgis-archive-keyring.gpg] https://qgis.org/debian-ltr bullseye main" | tee /etc/apt/sources.list.d/qgis.list \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests --allow-unauthenticated -y \
-    qgis-providers-common=1:3.34.14+16bullseye \
-    python3-qgis-common=1:3.34.14+16bullseye \
-    qgis-server=1:3.34.14+16bullseye  \
+    qgis-providers-common \
+    python3-qgis-common \
+    qgis-server \
         python3-qgis \
         spawn-fcgi \
         xauth \
@@ -89,7 +89,7 @@ RUN ls -alh /usr/lib/qgis/plugins/
 # QGIS Plugin
 # setup qgis-plugin-manager and upgrade qgis plugins
 ENV QGIS_PLUGINPATH /usr/lib/qgis/plugins/
-RUN pip3 install qgis-plugin-manager
+RUN pip3 install qgis-plugin-manager --break-system-packages
 RUN cd /usr/lib/qgis/plugins
 RUN qgis-plugin-manager init
 RUN qgis-plugin-manager update
